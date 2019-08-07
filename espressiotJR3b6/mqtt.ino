@@ -28,7 +28,7 @@ void MQTT_reconnect() {
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
 //    if (client.connect(clientId.c_str())) {
-    if (client.connect(clientId.c_str(),"blais","Jrobla11")) {
+    if (client.connect(clientId.c_str(),"mqtt_user","mqtt_password")) {
       Serial.println("connected");
       client.subscribe("ESPressIoT/config/#", 1);
     } else {
