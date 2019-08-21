@@ -4,7 +4,7 @@ My implementation of Espressiot ( https://github.com/Schm1tz1/ESPressIoT ) ...
 
 A good place to file my doc.
 
-Added code for espressiot using a modified Adafruit MAX31865 RTD library and code for a portable ESP8266 with Oled display.
+Added code for espressiot using a modified Adafruit MAX31865 RTD library and code for a second portable ESP8266 with Oled display.
 
 I made the library non-blocking by changing the 10 msec. (bias enable) and a 65 msec. (conversion time) delays using millis().
 
