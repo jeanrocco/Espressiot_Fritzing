@@ -12,7 +12,7 @@ I was having issues running the Oled display on the same Espressiot's ESP8266, t
 
 Every second, the Espressiot-PID code "publishes" the RTD temperature to an MQTT broker, Mosquitto, which is running on a Raspberry PI (it was already running for Home Assistant...). Every 1/2 seconds, the Oled-display-ESP8266's code, which "subscribes" to the MQTT broker temperature, will update the Oled displays.
 
-The file espressiotJR3b7c (https://github.com/jeanrocco/Espressiot_Fritzing/tree/master/espressiotJR3b7c) corrects the closed issue ESPressiot "Tuning loop not doing correct peak to peak temperature  ( https://github.com/Schm1tz1/ESPressIoT/issues/2 ). This will allow a more accurate autotuning of the P, I and D parameters.
+The file espressiotJR3b7c (https://github.com/jeanrocco/Espressiot_Fritzing/tree/master/espressiotJR3b7c) corrects the closed issue ESPressiot "Tuning loop not doing correct peak to peak temperature"  ( https://github.com/Schm1tz1/ESPressIoT/issues/2 ). This will allow a more accurate autotuning of the P, I and D parameters.
 
 
 
