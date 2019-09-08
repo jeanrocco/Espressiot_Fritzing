@@ -5,7 +5,7 @@
 // Simple PID tuning procedure
 // based on the blog entry http://brettbeauregard.com/blog/2012/01/arduino-pid-autotune-library/
 // 
-//  Modified to allow detection of maximum and minimum temperature detection by jrb. (ref: https://github.com/Schm1tz1/ESPressIoT/issues/2)
+//  Modified to allow detection of maximum and minimum temperature by jrb. (ref: https://github.com/Schm1tz1/ESPressIoT/issues/2)
 
 
 double aTuneStep=100.0, aTuneThres=0.2;
