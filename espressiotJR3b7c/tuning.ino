@@ -4,7 +4,9 @@
 //
 // Simple PID tuning procedure
 // based on the blog entry http://brettbeauregard.com/blog/2012/01/arduino-pid-autotune-library/
-//
+// 
+//  Modified to allow detection of maximum and minimum temperature detection by jrb. (ref: https://github.com/Schm1tz1/ESPressIoT/issues/2)
+
 
 double aTuneStep=100.0, aTuneThres=0.2;
 double AvgUpperT=0, AvgLowerT=0;
@@ -48,60 +50,38 @@ void tuning_loop() {
   // count seconds between power-on-cycles
   //
   //
-  if(gInputTemp<(gTargetTemp-aTuneThres)) { // below lower threshold -> power on
-    if(gOutputPwr==0) { // just fell below threshold
+  if(gInputTemp<(gTargetTemp-aTuneThres)) {                             // below lower threshold -> power on
+    if(gOutputPwr==0) {                                                 // just fell below threshold
       if(tune_count==0) tune_start=time_now;
       tune_time=time_now;
       tune_count++;
       MaxLowerT = gInputTemp;
 //      Serial.print("MaxLowerT1 = "); Serial.println(MaxLowerT);
 //      AvgLowerT = gInputTemp;
-      sm2 = 2;   
-//      AvgLowerT += gInputTemp;
-//      LowerCnt++;
+      sm2 = 2;                                                           // set reset ...  
     }
-    if(MaxLowerT == 0) MaxLowerT = gInputTemp;
-    if(gInputTemp < MaxLowerT) MaxLowerT = gInputTemp;   
+    if(MaxLowerT == 0) MaxLowerT = gInputTemp;                           // it happens
+    if(gInputTemp < MaxLowerT) MaxLowerT = gInputTemp;                   // find the minimum lower temperature
 //    Serial.print("MaxLowerT = "); Serial.println(MaxLowerT); 
 //    Serial.print(MaxLowerT, 2); Serial.print(" ");
     gOutputPwr=aTuneStep;
     setHeatPowerPercentage(aTuneStep);
   }
-  if(gInputTemp<(gTargetTemp+aTuneThres) && gInputTemp > gTargetTemp) {
-    if(gOutputPwr==aTuneStep) {
-      if(sm1 == 2) {
+  if(gInputTemp<(gTargetTemp+aTuneThres) && gInputTemp > gTargetTemp) {  // wait till the end of the ON power cycle to add MaxLowerT to AvgLowerT ...
+    if(gOutputPwr==aTuneStep) {                                          // this makes sure we are indeed going upward...
+      if(sm1 == 2) {                                                     // switch to add MaxLowerT only once...
         AvgLowerT += MaxLowerT;
         LowerCnt++;
-        sm1 = 1;
+        sm1 = 1;                                                         // close the switch.
 //        Serial.print(MaxLowerT, 2); Serial.print(" ");
-        MaxLowerT = gTargetTemp - aTuneThres;
+        MaxLowerT = gTargetTemp - aTuneThres;                            // reset the MaxlowerT to it's higher limit.
       }
     }
   }
-/*  switch(sm1) {
-
-    case 1:
-
-      AvgLowerT += MaxLowerT;
-      LowerCnt++;
-      sm1 = 3;
-      break;
-
-    case 2:
-
-      sm1 = 3;
-      break;
-
-    case 3:
-
-      break;
-  }
-*/
-
 
   
-  if(gInputTemp>(gTargetTemp+aTuneThres)) { // above upper threshold -> power off
-    if(gOutputPwr==aTuneStep) { // just crossed upper threshold
+  if(gInputTemp>(gTargetTemp+aTuneThres)) {                              // above upper threshold -> power off
+    if(gOutputPwr==aTuneStep) {                                          // just crossed upper threshold
 //      AvgUpperT += gInputTemp;
 //      UpperCnt++;
       MaxUpperT = gInputTemp;
@@ -109,36 +89,21 @@ void tuning_loop() {
       sm1 = 2;
       
     }
-    if(gInputTemp > MaxUpperT) MaxUpperT = gInputTemp;
+    if(gInputTemp > MaxUpperT) MaxUpperT = gInputTemp;                    // find out the maximum upper temperature
 //    Serial.print("  MaxUpperT = "); Serial.println(MaxUpperT);
 //    Serial.print(MaxUpperT,2); Serial.print(" ");
     gOutputPwr=0;
     setHeatPowerPercentage(0);
   }
-  if(gInputTemp>(gTargetTemp-aTuneThres) && gInputTemp < gTargetTemp) {
-    if(gOutputPwr== 0) {
-      if(sm2 == 2) {
+  if(gInputTemp>(gTargetTemp-aTuneThres) && gInputTemp < gTargetTemp) {   // wait till the end of the OFF power cycle to add MaxUpperT to AvgUpperT
+    if(gOutputPwr== 0) {                                                  // are we are going downward ?     
+      if(sm2 == 2) {                                                      // add MaxUpperT only once per cycle.
         AvgUpperT += MaxUpperT;
         UpperCnt++;
-        sm2 = 1;
+        sm2 = 1;                                                          // close the switch
 //        Serial.print(MaxUpperT,2); Serial.print(" ");
-        MaxUpperT = gTargetTemp + aTuneThres;
+        MaxUpperT = gTargetTemp + aTuneThres;                             // reset MaxUpperT to it's lower limit
       }
     }
-  }  
-  
-/*  switch(sm2) {
-
-      case 1:
-
-        AvgUpperT += MaxUpperT;
-        UpperCnt++;
-        sm2 = 2;
-        break;
-
-      case 2:
-
-        break;
-  }
-*/  
+  }    
 }
