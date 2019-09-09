@@ -50,7 +50,7 @@ double gOutputPwr=0.0;
 double gP = S_P, gI = S_I, gD = S_D;
 double gaP = S_aP, gaI = S_aI, gaD = S_aD;
 
-double MaxUpperT=0, MaxLowerT=0;
+double MaxUpperT=0, MaxLowerT=0;                // declared here to allow cute "serial plotter" output...
 
 unsigned long time_now=0;
 unsigned long time_last=0;
@@ -140,8 +140,8 @@ void setup()
 void serialStatus() {
   Serial.print(gInputTemp, 2); Serial.print(" ");
   Serial.print(gTargetTemp, 2); Serial.print(" ");
-  Serial.print(MaxLowerT, 2); Serial.print(" ");
-  Serial.print(MaxUpperT, 2); Serial.print(" ");
+  Serial.print(MaxLowerT, 2); Serial.print(" ");      // have a look at the " Tools -> Serial Plotter " when running auto-tune
+  Serial.print(MaxUpperT, 2); Serial.print(" ");      // this gives a cute display !
 //  Serial.print(gOutputPwr, 2); Serial.print(" ");
 //  Serial.print(gP, 2); Serial.print(" ");
 //  Serial.print(gI, 2); Serial.print(" ");
