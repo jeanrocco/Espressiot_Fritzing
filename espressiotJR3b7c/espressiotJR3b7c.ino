@@ -11,7 +11,7 @@
 // WIFI
 
 #define WIFI_SSID "ASUS"
-#define WIFI_PASS "Jrobla11"
+#define WIFI_PASS "password"
 
 // options for special modules
 #define ENABLE_JSON
